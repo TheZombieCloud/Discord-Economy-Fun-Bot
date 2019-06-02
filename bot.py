@@ -29,16 +29,20 @@ def data_edit(userID, num, balance, balance2):
     cursor.execute("UPDATE currency SET currency = " + str(balance2 + int(balance*num)) + " WHERE userID = " + userID)
     conn.commit()
 
-def data_editdaily(userID, time, bits):
+def data_editdaily(userID, balance):
     cursor.execute("SELECT time FROM currency WHERE userID = " + userID)
     data2 = str(cursor.fetchall()).strip("[]")
     data2 = data2[2:len(data2)-3]
-    if ((datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).seconds>=time):
-        cursor.execute("UPDATE currency SET currency = " + str(int(str(data_retrieve(message.author.id)).strip("[]")[1:len(balance)-2])+bits) + " WHERE userID = " + userID)
+    if ((datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).days>=1):
+        print(str(datetime.datetime.now()))
+        cursor.execute("UPDATE currency SET currency = " + str(int(str(data_retrieve(userID)).strip("[]")[1:len(balance)-2])+10000) + " WHERE userID = " + userID)
+        cursor.execute("UPDATE currency SET time = '" + str(datetime.datetime.now()) + "' WHERE userID = " + userID)
         conn.commit()
         return "1"
     else:
         return (datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).seconds
+
+
 
 @client.event
 async def on_message(message):
@@ -106,7 +110,7 @@ async def on_message(message):
                 embed.add_field(name = "Sorry", value = "You do not have enough bits.")
                 await channel.send(embed = embed)
         elif (message.content[3:8] == "daily"):
-            str2 = data_editdaily(str(message.author.id), 86400, 10000)
+            str2 = data_editdaily(str(message.author.id), balance)
             if (str2=="1"):
                 embed.add_field(name = "Daily", value = "You have just received 10000 bits.")
                 await channel.send(embed = embed)
