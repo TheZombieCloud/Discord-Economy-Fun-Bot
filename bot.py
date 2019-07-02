@@ -5,7 +5,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = ''
+TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XPMrjA.Hxs39afhWOT9fVZHc9qEzdWH-Z0'
 
 client = discord.Client()
 
@@ -14,10 +14,10 @@ cursor = conn.cursor()
 
 
 def create_table():
-    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, time DATE)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, time DATE, mtime DATE)")
 
 def data_entry(userID):
-    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, '" + str(datetime.datetime.now()) +"')")
+    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"')")
     conn.commit()
 
 def data_retrieve(userID):
@@ -34,7 +34,7 @@ def data_editdaily(userID, balance):
     data2 = str(cursor.fetchall()).strip("[]")
     data2 = data2[2:len(data2)-3]
     if ((datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).days>=1):
-        print(str(datetime.datetime.now()))
+        #print(str(datetime.datetime.now()))
         cursor.execute("UPDATE currency SET currency = " + str(int(str(data_retrieve(userID)).strip("[]")[1:len(balance)-2])+10000) + " WHERE userID = " + userID)
         cursor.execute("UPDATE currency SET time = '" + str(datetime.datetime.now()) + "' WHERE userID = " + userID)
         conn.commit()
@@ -42,7 +42,17 @@ def data_editdaily(userID, balance):
     else:
         return (datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).seconds
 
-
+def data_rmess(userID, balance):
+    cursor.execute("SELECT mtime FROM currency WHERE userID = " + userID)
+    data2 = str(cursor.fetchall()).strip("[]")
+    data2 = data2[2:len(data2)-3]
+    now = datetime.datetime.now()
+    prev = datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")
+    if ((now-prev).total_seconds()>=30.00):
+        cursor.execute("UPDATE currency SET currency = " + str(int(str(data_retrieve(userID)).strip("[]")[1:len(balance)-2])+10) + " WHERE userID = " + userID)
+        cursor.execute("UPDATE currency SET mtime = '" + str(now) + "' WHERE userID = " + userID)
+        conn.commit()
+        return "1"
 
 @client.event
 async def on_message(message):
@@ -176,6 +186,8 @@ async def on_message(message):
             embed.add_field(name = "coin <bet>", value = "Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x")
             embed.add_field(name = "steal <user> <bet>", value = "Steal from someone. Replace <user> with the user you want to steal from. Replace <bet> with your bet. 1/3 Success.")
             await channel.send(embed = embed)
+    # Get bits every 30 seconds
+    str2 = data_rmess(str(message.author.id), balance)
 
 @client.event
 async def on_ready():
