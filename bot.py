@@ -92,6 +92,33 @@ async def on_message(message):
             else:
                 embed.add_field(name = "Balance", value = "You have " + balance[1:len(balance)-2] + " bits.")
                 await channel.send(embed=embed)
+        elif (len(message.content)>=7 and message.content[3:7] == "dice"):
+            bet = int(message.content[7:len(message.content)])
+            balance = str(data_retrieve(str(message.author.id))).strip("[]")
+            balance = balance[1:len(balance) - 2]
+            balance = int(balance)
+            if (bet<=0):
+                embed.add_field(name="Sorry", value="Your bet is not valid.")
+                await channel.send(embed=embed)
+            elif (balance>=bet):
+                embed.add_field(name = "Dice Roll", value = "Rolling Dice...")
+                embed.set_image(url = "https://media1.giphy.com/media/3oGRFlpAW4sIHA02NW/giphy.gif")
+                message2 = await channel.send(embed = embed)
+                time.sleep(3)
+                await message2.delete()
+                if (random.randint(1, 6) == 6):
+                    embed = discord.Embed(color=0x45F4E9)
+                    data_edit(str(message.author.id), 5, bet, balance)
+                    embed.add_field(name="Congrats", value="You won " + str(bet * 6) + " bits.")
+                    await channel.send(embed=embed)
+                else:
+                    embed = discord.Embed(color=0x45F4E9)
+                    data_edit(str(message.author.id), 1, -bet, balance)
+                    embed.add_field(name="You Suck", value="You just lost " + str(bet) + " bits.")
+                    await channel.send(embed=embed)
+            else:
+                embed.add_field(name="Sorry", value="You do not have enough bits.")
+                await channel.send(embed=embed)
         elif (len(message.content)>=7 and message.content[3:7] == "coin"):
             bet = int(message.content[7:len(message.content)])
             balance = str(data_retrieve(str(message.author.id))).strip("[]")
@@ -108,7 +135,7 @@ async def on_message(message):
                 await message2.delete()
                 if (random.randint(0,1)):
                     embed = discord.Embed(color = 0x45F4E9)
-                    data_edit(str(message.author.id), 2, bet, balance)
+                    data_edit(str(message.author.id), 1, bet, balance)
                     embed.add_field(name = "Congrats", value = "You won " + str(bet*2) + " bits.")
                     await channel.send(embed = embed)
                 else:
@@ -184,6 +211,7 @@ async def on_message(message):
             embed.add_field(name = "register", value = "Register an account and earn 10000 bits instantly.")
             embed.add_field(name = "balance", value = "This command allows you to check your balance.")
             embed.add_field(name = "coin <bet>", value = "Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x")
+            embed.add_field(name = "dice <bet>", value = "Roll a Dice. Replace <bet> with your bet. Win = 6x. Lose = 0x")
             embed.add_field(name = "steal <user> <bet>", value = "Steal from someone. Replace <user> with the user you want to steal from. Replace <bet> with your bet. 1/3 Success.")
             await channel.send(embed = embed)
     # Get bits every 30 seconds
