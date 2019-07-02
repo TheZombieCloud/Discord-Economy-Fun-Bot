@@ -5,7 +5,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XPMrjA.Hxs39afhWOT9fVZHc9qEzdWH-Z0'
+TOKEN = ''
 
 client = discord.Client()
 
