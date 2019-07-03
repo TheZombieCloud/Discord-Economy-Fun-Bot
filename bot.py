@@ -5,7 +5,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = ''
+TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XPMrjA.Hxs39afhWOT9fVZHc9qEzdWH-Z0'
 
 client = discord.Client()
 
@@ -14,10 +14,10 @@ cursor = conn.cursor()
 
 
 def create_table():
-    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, time DATE, mtime DATE)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, time DATE, mtime DATE, health INTEGER)")
 
 def data_entry(userID):
-    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"')")
+    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000)")
     conn.commit()
 
 def data_retrieve(userID):
@@ -72,7 +72,10 @@ async def on_message(message):
         return
 
     if message.content.startswith('ec!'):
-        if (len(message.content)==11 and message.content[3:11] == "register"):
+        if (len(message.content)==7 and message.content[3:7] == "info"):
+            embed.add_field(name = "Info", value = "When you register, you start out with 10,000 bits and a wall surronding your money with 1,000 health. You can upgrade your wall, buy defenses, or buy offenses to infiltrate other users' walls and steal their money. You can also play minigames to earn more money or upgrade existing forgeries to earn more or different types of currencies.")
+            await channel.send(embed=embed)
+        elif (len(message.content)==11 and message.content[3:11] == "register"):
             balance = str(data_retrieve(str(message.author.id))).strip("[]")
             if balance[1:len(balance)-2]!="":
                 embed.add_field(name = "Registration", value = "You already have an account!")
@@ -208,6 +211,7 @@ async def on_message(message):
             pass
         elif (message.content[3:len(message.content)]=="help"):
             embed.add_field(name = "All Commands", value = "Speak every 30 seconds to get free bits. Use ec! before each command.")
+            embed.add_field(name = "info", value = "All the information needed to get started.")
             embed.add_field(name = "register", value = "Register an account and earn 10000 bits instantly.")
             embed.add_field(name = "balance", value = "This command allows you to check your balance.")
             embed.add_field(name = "coin <bet>", value = "Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x")
