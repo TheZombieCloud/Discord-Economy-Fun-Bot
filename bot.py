@@ -5,7 +5,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XPMrjA.Hxs39afhWOT9fVZHc9qEzdWH-Z0'
+TOKEN = ''
 
 client = discord.Client()
 
@@ -22,6 +22,11 @@ def data_entry(userID):
 
 def data_retrieve(userID):
     cursor.execute("SELECT currency FROM currency WHERE userID = " + userID)
+    data = cursor.fetchall()
+    return data
+
+def data_retrievea(userID, selection):
+    cursor.execute("SELECT " + selection + " FROM currency WHERE userID = " + userID)
     data = cursor.fetchall()
     return data
 
@@ -72,6 +77,10 @@ async def on_message(message):
         return
 
     if message.content.startswith('ec!'):
+        if (len(message.content)==7 and message.content[3:7] == "wall"):
+            health = str(data_retrievea(str(message.author.id), "health")).strip("[]")
+            embed.add_field(name = "Wall Health", value = "Looks like your wall is sitting at " + health[1:len(health)-2] + " health.")
+            await channel.send(embed=embed)
         if (len(message.content)==7 and message.content[3:7] == "info"):
             embed.add_field(name = "Info", value = "When you register, you start out with 10,000 bits and a wall surronding your money with 1,000 health. You can upgrade your wall, buy defenses, or buy offenses to infiltrate other users' walls and steal their money. You can also play minigames to earn more money or upgrade existing forgeries to earn more or different types of currencies.")
             await channel.send(embed=embed)
