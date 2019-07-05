@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="632c9fbe-6a13-4d8e-8882-b9e46e4a3571" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/currency.db" beforeDir="false" afterPath="$PROJECT_DIR$/currency.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+            <state relative-caret-position="510">
+              <caret line="229" column="45" lean-forward="true" selection-start-line="229" selection-start-column="45" selection-end-line="229" selection-end-column="45" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -161,12 +159,12 @@
       <workItem from="1559513527505" duration="732000" />
       <workItem from="1561232836107" duration="347000" />
       <workItem from="1561269826584" duration="20000" />
-      <workItem from="1562044568090" duration="11734000" />
+      <workItem from="1562044568090" duration="12826000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11754000" />
+    <option name="totallyTimeSpent" value="12846000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
@@ -177,7 +175,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3293919" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3293919" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -236,8 +234,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+        <state relative-caret-position="510">
+          <caret line="229" column="45" lean-forward="true" selection-start-line="229" selection-start-column="45" selection-end-line="229" selection-end-column="45" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

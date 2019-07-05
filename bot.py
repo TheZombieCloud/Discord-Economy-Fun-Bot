@@ -5,7 +5,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = ''
+TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XRwHfQ.WKsKmSuKJBlLSBP8h8vpQr5Yq3c'
 
 client = discord.Client()
 
@@ -223,6 +223,7 @@ async def on_message(message):
             embed.add_field(name = "info", value = "All the information needed to get started.")
             embed.add_field(name = "register", value = "Register an account and earn 10000 bits instantly.")
             embed.add_field(name = "balance", value = "This command allows you to check your balance.")
+            embed.add_field(name = "wall", value = "Check the health of your wall.")
             embed.add_field(name = "coin <bet>", value = "Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x")
             embed.add_field(name = "dice <bet>", value = "Roll a Dice. Replace <bet> with your bet. Win = 6x. Lose = 0x")
             embed.add_field(name = "steal <user> <bet>", value = "Steal from someone. Replace <user> with the user you want to steal from. Replace <bet> with your bet. 1/3 Success.")
