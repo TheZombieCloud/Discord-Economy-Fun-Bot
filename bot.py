@@ -5,7 +5,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XRwHfQ.WKsKmSuKJBlLSBP8h8vpQr5Yq3c'
+TOKEN = ''
 
 client = discord.Client()
 
@@ -14,10 +14,10 @@ cursor = conn.cursor()
 
 
 def create_table():
-    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, time DATE, mtime DATE, health INTEGER)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER)")
 
 def data_entry(userID):
-    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000)")
+    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000, 1000)")
     conn.commit()
 
 def data_retrieve(userID):
@@ -29,6 +29,10 @@ def data_retrievea(userID, selection):
     cursor.execute("SELECT " + selection + " FROM currency WHERE userID = " + userID)
     data = cursor.fetchall()
     return data
+
+def data_edita(userID, selection, new):
+    cursor.execute("UPDATE currency SET " + selection + "= " + str(new) + " WHERE userID = " + userID)
+    conn.commit()
 
 def data_edit(userID, num, balance, balance2):
     cursor.execute("UPDATE currency SET currency = " + str(balance2 + int(balance*num)) + " WHERE userID = " + userID)
@@ -66,10 +70,6 @@ async def on_message(message):
     embed = discord.Embed(color = 0x45F4E9)
     channel = message.channel
 
-    #Reward user for typing every 30 seconds
-    #if (balance[1:len(balance)-2]!=""):
-        #data_editdaily(str(message.author.id), 30, 5)
-
     if message.author == client.user:
         return
 
@@ -77,11 +77,11 @@ async def on_message(message):
         return
 
     if message.content.startswith('ec!'):
-        if (len(message.content)==7 and message.content[3:7] == "wall"):
+        if (len(message.content)==7 and message.content[3:7] == "info"):
             health = str(data_retrievea(str(message.author.id), "health")).strip("[]")
             embed.add_field(name = "Wall Health", value = "Looks like your wall is sitting at " + health[1:len(health)-2] + " health.")
             await channel.send(embed=embed)
-        if (len(message.content)==7 and message.content[3:7] == "info"):
+        if (len(message.content)==8 and message.content[3:8] == "start"):
             embed.add_field(name = "Info", value = "When you register, you start out with 10,000 bits and a wall surronding your money with 1,000 health. You can upgrade your wall, buy defenses, or buy offenses to infiltrate other users' walls and steal their money. You can also play minigames to earn more money or upgrade existing forgeries to earn more or different types of currencies.")
             await channel.send(embed=embed)
         elif (len(message.content)==11 and message.content[3:11] == "register"):
@@ -216,14 +216,33 @@ async def on_message(message):
                             embed = discord.Embed(color = 0x45F4E9)
                             embed.add_field(name = "Unlucky", value = "Your friend has caught you. You run away but your friend snatches " + str(bet) + " bits from you in the process.")
                             await channel.send(embed = embed)
-        elif (message.content[3:len(message.content)]=="rankup"):
-            pass
+        elif (message.content[3:len(message.content)]=="rankwall"):
+            health = str(data_retrievea(str(message.author.id), "health")).strip("[]")
+            health = health[1:len(health) - 2]
+            health = int(health)
+            health *= 2
+            userID = str(message.author.id)
+            balance = str(data_retrieve(str(message.author.id))).strip("[]")
+            balance = balance[1:len(balance) - 2]
+            balance = int(balance)
+            if (balance>=health*25):
+                data_edita(userID, "health", health)
+                data_edita(userID, "maxhealth", health)
+                data_edita(userID, "currency", balance-health*25)
+                embed = discord.Embed(color = 0x45F4E9)
+                embed.add_field(name = "Upgraded", value = "Your wall now has a max health of " + str(health))
+                await channel.send(embed = embed)
+            else:
+                embed = discord.Embed(color = 0x45F4E9)
+                embed.add_field(name = "Sorry", value = "You need " + str(health*25-balance) + " more to upgrade your wall.")
+                await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="help"):
             embed.add_field(name = "All Commands", value = "Speak every 30 seconds to get free bits. Use ec! before each command.")
-            embed.add_field(name = "info", value = "All the information needed to get started.")
+            embed.add_field(name = "start", value = "All the information needed to get started.")
             embed.add_field(name = "register", value = "Register an account and earn 10000 bits instantly.")
             embed.add_field(name = "balance", value = "This command allows you to check your balance.")
-            embed.add_field(name = "wall", value = "Check the health of your wall.")
+            embed.add_field(name = "info", value = "All the information about your wall, units, and potentital upgrades.")
+            embed.add_field(name = "rankwall", value = "Increases the health of your wall.")
             embed.add_field(name = "coin <bet>", value = "Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x")
             embed.add_field(name = "dice <bet>", value = "Roll a Dice. Replace <bet> with your bet. Win = 6x. Lose = 0x")
             embed.add_field(name = "steal <user> <bet>", value = "Steal from someone. Replace <user> with the user you want to steal from. Replace <bet> with your bet. 1/3 Success.")
