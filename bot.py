@@ -15,11 +15,13 @@ cursor = conn.cursor()
 troops = []
 
 class Troop():
-    def __init__(self, type, name, dmg, cost):
+    def __init__(self, type, name, dmg, cost, desc, curr):
         self._type = type
         self._name = name
         self._dmg = dmg
         self._cost = cost
+        self._desc = desc
+        self._curr = curr
 
 def create_table():
     cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER)")
@@ -332,6 +334,46 @@ async def on_message(message):
             embed.add_field(name = "Shop", value = "Buy defensive troops here to protect your base, or buy offensive troops to infiltrate others. Type ec!<troop name> to learn more.")
             embed.add_field(name = "Defensive", value = defensive)
             embed.add_field(name = "Offensive", value = offensive)
+            await channel.send(embed=embed)
+        for troop in troops:
+            if (message.content[3:len(message.content)]==troop._name):
+                embed = discord.Embed(color = 0x45F4E9)
+                embed.add_field(name = troop._name, value = troop._desc)
+                embed.add_field(name = "Type", value = troop._type)
+                embed.add_field(name = "Cost", value = troop._cost + " " + troop._curr)
+                embed.add_field(name = "Damage", value = troop._cost + "/s")
+                embed.add_field(name = "Buy?", value = "Type \"ec!" + troop._name + " buy\" to buy " + troop._name)
+                await channel.send(embed=embed)
+            if (message.content[3:len(message.content)]==str(troop._name + " buy")):
+                userID = str(message.author.id)
+                balance = str(data_retrieve(str(message.author.id))).strip("[]")
+                balance = balance[1:len(balance) - 2]
+                balance = int(balance)
+                iron = str(data_retrieve(str(message.author.id), "iron")).strip("[]")
+                iron = iron[1:len(balance) - 2]
+                iron = int(iron)
+                if (troop._curr=="iron"):
+                    if (iron>=troop._cost):
+                        data_edita(userID, "iron", iron-troop._cost)
+                        #Add troop dmg
+                        embed = discord.Embed(color = 0x45F4E9)
+                        embed.add_field(name = "Congrats", value = "You just purchased " + troop._name + " for " + troop._cost + " " + troop._curr + ".")
+                        await channel.send(embed = embed)
+                    else:
+                        embed = discord.Embed(color = 0x45F4E9)
+                        embed.add_field(name = "Sorry", value = "You need " + str(troop._cost-iron) + " more " + troop._curr + " to purchase this troop.")
+                        await channel.send(embed = embed)
+                else:
+                    if (balance>=troop.cost):
+                        data_edita(userID, "currency", balance-troop._cost)
+                        #Add troop dmg
+                        embed = discord.Embed(color = 0x45F4E9)
+                        embed.add_field(name = "Congrats", value = "You just purchased " + troop._name + " for " + troop._cost + " " + troop._curr + ".")
+                        await channel.send(embed = embed)
+                    else:
+                        embed = discord.Embed(color = 0x45F4E9)
+                        embed.add_field(name = "Sorry", value = "You need " + str(troop._cost-balance) + " more " + troop._curr + " to purchase this troop.")
+                        await channel.send(embed = embed)
     # Get bits every minute
     str2 = data_rmess(str(message.author.id), balance, curiron, bits, iron)
 
