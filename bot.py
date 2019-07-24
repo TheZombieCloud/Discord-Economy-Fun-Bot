@@ -12,6 +12,14 @@ client = discord.Client()
 conn = sqlite3.connect("currency.db")
 cursor = conn.cursor()
 
+troops = []
+
+class Troop():
+    def __init__(self, type, name, dmg, cost):
+        self._type = type
+        self._name = name
+        self._dmg = dmg
+        self._cost = cost
 
 def create_table():
     cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER)")
@@ -306,6 +314,24 @@ async def on_message(message):
                 embed = discord.Embed(color=0x45F4E9)
                 embed.add_field(name="Sorry", value="You need " + str(gainiron * 5000 - balance) + " more bits to upgrade the amount of iron you generate.")
                 await channel.send(embed=embed)
+        elif (message.content[3:len(message.content)]=="shop"):
+            defensive = ""
+            offensive = ""
+            for troop in troops:
+                if troop._type == "defensive":
+                    if defensive == "":
+                        defensive = troop._name
+                    else:
+                        defensive += ", " + troop._name
+                else:
+                    if offensive == "":
+                        offensive = troop._name
+                    else:
+                        offensive += ", " + troop._name
+            embed = discord.Embed(color = 0x45F4E9)
+            embed.add_field(name = "Shop", value = "Buy defensive troops here to protect your base, or buy offensive troops to infiltrate others. Type ec!<troop name> to learn more.")
+            embed.add_field(name = "Defensive", value = defensive)
+            embed.add_field(name = "Offensive", value = offensive)
     # Get bits every minute
     str2 = data_rmess(str(message.author.id), balance, curiron, bits, iron)
 
