@@ -24,10 +24,10 @@ class Troop():
         self._curr = curr
 
 def create_table():
-    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER, odmg INTEGER, ddmg, INTEGER)")
 
 def data_entry(userID):
-    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, 0, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000, 1000, 10, 0)")
+    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, 0, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000, 1000, 10, 0, 0, 0)")
     conn.commit()
 
 def data_retrieve(userID):
@@ -355,7 +355,10 @@ async def on_message(message):
                 if (troop._curr=="iron"):
                     if (iron>=troop._cost):
                         data_edita(userID, "iron", iron-troop._cost)
-                        #Add troop dmg
+                        if (troop._type == "defensive"):
+                            data_edita(userID, "ddmg", int(data_retrievea(userID, "ddmg"))+troop._dmg)
+                        else:
+                            data_edita(userID, "odmg", int(data_retrievea(userID, "odmg")) + troop._dmg)
                         embed = discord.Embed(color = 0x45F4E9)
                         embed.add_field(name = "Congrats", value = "You just purchased " + troop._name + " for " + troop._cost + " " + troop._curr + ".")
                         await channel.send(embed = embed)
@@ -366,7 +369,10 @@ async def on_message(message):
                 else:
                     if (balance>=troop.cost):
                         data_edita(userID, "currency", balance-troop._cost)
-                        #Add troop dmg
+                        if (troop._type == "defensive"):
+                            data_edita(userID, "ddmg", int(data_retrievea(userID, "ddmg")) + troop._dmg)
+                        else:
+                            data_edita(userID, "odmg", int(data_retrievea(userID, "odmg")) + troop._dmg)
                         embed = discord.Embed(color = 0x45F4E9)
                         embed.add_field(name = "Congrats", value = "You just purchased " + troop._name + " for " + troop._cost + " " + troop._curr + ".")
                         await channel.send(embed = embed)
