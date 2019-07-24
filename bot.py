@@ -251,7 +251,7 @@ async def on_message(message):
                 await channel.send(embed = embed)
             else:
                 embed = discord.Embed(color = 0x45F4E9)
-                embed.add_field(name = "Sorry", value = "You need " + str(health*25-balance) + " more to upgrade your wall.")
+                embed.add_field(name = "Sorry", value = "You need " + str(health*25-balance) + " more bits to upgrade your wall.")
                 await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="rankbits"):
             userID = str(message.author.id)
@@ -270,19 +270,33 @@ async def on_message(message):
                 await channel.send(embed = embed)
             else:
                 embed = discord.Embed(color = 0x45F4E9)
-                embed.add_field(name = "Sorry", value = "You need " + str(gainbits*25-balance) + " more to upgrade the amount of bits you generate.")
+                embed.add_field(name = "Sorry", value = "You need " + str(gainbits*25-balance) + " more bits to upgrade the amount of bits you generate.")
                 await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="rankiron"):
             userID = str(message.author.id)
             balance = str(data_retrieve(str(message.author.id))).strip("[]")
             balance = balance[1:len(balance) - 2]
             balance = int(balance)
+            iron = str(data_retrieve(str(message.author.id), "iron")).strip("[]")
+            iron = iron[1:len(balance)-2]
+            iron = int(iron)
             gainiron = str(data_retrievea(str(message.author.id), "gainIron")).strip("[]")
             gainiron = gainiron[1:len(gainiron) - 2]
             gainiron = int(gainiron)
             gainiron *= 2
             gainiron += 1
-            if (balance >= gainiron * 5000):
+            if (gainiron * 5000 >= 1000000):
+                if (iron >= gainiron * 25):
+                    data_edita(userID, "gainIron", gainiron)
+                    data_edita(userID, "iron", iron - gainiron * 25)
+                    embed = discord.Embed(color=0x45F4E9)
+                    embed.add_field(name="Upgraded", value="You gain " + str(gainiron) + " iron now when you speak every minute.")
+                    await channel.send(embed=embed)
+                else:
+                    embed = discord.Embed(color=0x45F4E9)
+                    embed.add_field(name="Sorry", value="You need " + str(gainiron * 25 - iron) + " more iron to upgrade the amount of iron you generate.")
+                    await channel.send(embed=embed)
+            elif (balance >= gainiron * 5000):
                 data_edita(userID, "gainIron", gainiron)
                 data_edita(userID, "currency", balance - gainiron * 5000)
                 embed = discord.Embed(color=0x45F4E9)
@@ -290,7 +304,7 @@ async def on_message(message):
                 await channel.send(embed=embed)
             else:
                 embed = discord.Embed(color=0x45F4E9)
-                embed.add_field(name="Sorry", value="You need " + str(gainiron * 5000 - balance) + " more to upgrade the amount of iron you generate.")
+                embed.add_field(name="Sorry", value="You need " + str(gainiron * 5000 - balance) + " more bits to upgrade the amount of iron you generate.")
                 await channel.send(embed=embed)
     # Get bits every minute
     str2 = data_rmess(str(message.author.id), balance, curiron, bits, iron)
