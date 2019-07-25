@@ -425,3 +425,7 @@
 [2381] addDownloadable "MultiEditorImage.7z"
 [2381] addDownloadable "sqlitestudio.7z"
 [2381] addDownloadable "DbSqlite2.7z"
+************************************* Invoked: Thu Jul 25 15:50:07 2019
+[0] Operations sanity check succeeded.
+[47] Network error while downloading 'http://sqlitestudio.pl/update-repo/windows//Updates.xml?139068540': Host sqlitestudio.pl not found.
+[49] Cannot retrieve remote tree No package sources set for this application..
