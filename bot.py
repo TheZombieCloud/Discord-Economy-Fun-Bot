@@ -1,4 +1,5 @@
 import discord
+import math
 import datetime
 import sqlite3
 import random
@@ -396,6 +397,44 @@ async def on_message(message):
                 embed = discord.Embed(color = 0x45F4E9)
                 embed.add_field(name = "Sorry", value = "Please mention the user you want to target.")
                 await channel.send(embed=embed)
+        elif (message.content[3:8]=="regen"):
+            userID = str(message.author.id)
+            balance = str(data_retrieve(userID)).strip("[]")
+            balance = balance[1:len(balance) - 2]
+            balance = int(balance)
+            health = str(data_retrievea(userID, "health")).strip("[]")
+            health = int(health[1:len(health)-2])
+            maxhealth = str(data_retrievea(userID, "maxhealth")).strip("[]")
+            maxhealth = int(maxhealth[1:len(maxhealth)-2])
+            valid = True
+            try:
+                regen = int(message.content[9: len(message.content)])
+            except ValueError:
+                embed = discord.Embed(embed = 0x45F4E9)
+                embed.add_field(name = "Sorry", value = "Please enter a valid number for the amount of health you wish to regen")
+                await channel.send(embed=embed)
+                valid = False
+            if valid:
+                if (regen==0):
+                    embed = discord.Embed(embed=0x45F4E9)
+                    embed.add_field(name="Sorry", value="Please enter a valid number for the amount of health you wish to regen")
+                    await channel.send(embed=embed)
+                if (maxhealth-health==0):
+                    embed = discord.Embed(embed = 0x45F4E9)
+                    embed.add_field(name = "Sorry", value = "Your wall is at full health.")
+                    await channel.send(embed=embed)
+                else:
+                    if regen+health>maxhealth:
+                        regen = maxhealth-health
+                    if (int(math.floor(regen * 1.5)) > balance):
+                        embed = discord.Embed(embed=0x45F4E9)
+                        embed.add_field(name="Sorry", value="You don't have enough money to regen your wall that much.")
+                        await channel.send(embed=embed)
+                    else:
+                        data_edita(userID, "currency", balance-int(math.floor(regen * 1.5)))
+                        data_edita(userID, "health", health+regen)
+                        embed.add_field(name = "Success", value = "The health of your wall is now " + str(health+regen))
+                        await channel.send(embed=embed)
         for troop in troops:
             if (message.content[3:len(message.content)]==troop._name):
                 embed = discord.Embed(color = 0x45F4E9)
