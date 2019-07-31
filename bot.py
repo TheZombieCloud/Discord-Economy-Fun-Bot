@@ -110,7 +110,6 @@ async def on_message(message):
             embed.add_field(name = "All Commands", value = "Speak every 60 seconds to get bits and iron. Use ec! before each command.")
             embed.add_field(name = "start", value = "All the information needed to get started.")
             embed.add_field(name = "register", value = "Register an account and earn 10000 bits instantly.")
-            embed.add_field(name = "balance", value = "This command allows you to check your balance.")
             embed.add_field(name = "info", value = "All the information about your wall, units, and potentital upgrades.")
             embed.add_field(name = "rankwall", value = "Increases the health of your wall.")
             embed.add_field(name = "rankbits", value = "Increases the amount of bits you earn every minute.")
@@ -137,14 +136,6 @@ async def on_message(message):
             health = str(data_retrievea(str(message.author.id), "health")).strip("[]")
             embed.add_field(name = "Wall Health", value = "Looks like your wall is sitting at " + health[1:len(health)-2] + " health.")
             await channel.send(embed=embed)
-        elif (len(message.content)==10 and message.content[3:10] == "balance"):
-            balance = str(data_retrieve(str(message.author.id))).strip("[]")
-            if balance[1:len(balance)-2]=="":
-                embed.add_field(name = "Balance", value = 'Register an account using \"ec!register\"')
-                await channel.send(embed = embed)
-            else:
-                embed.add_field(name = "Balance", value = "You have " + balance[1:len(balance)-2] + " bits.")
-                await channel.send(embed=embed)
         elif (len(message.content)>=7 and message.content[3:7] == "dice"):
             bet = int(message.content[7:len(message.content)])
             balance = str(data_retrieve(str(message.author.id))).strip("[]")
