@@ -6,7 +6,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XVTLXA.rR-Yk-ZVWNU9OOvBNGAHJKAZJXU'
+TOKEN = ''
 
 client = discord.Client()
 
@@ -36,7 +36,7 @@ def recursefib(wall, odmg, ddmg):
         return False
 
 def create_table():
-    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER, odmg INTEGER, ddmg, INTEGER)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER, odmg INTEGER, ddmg)")
 
 def data_entry(userID):
     cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, 0, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000, 1000, 10, 0, 0, 0)")
@@ -309,11 +309,11 @@ async def on_message(message):
             balance = str(data_retrieve(str(message.author.id))).strip("[]")
             balance = balance[1:len(balance) - 2]
             balance = int(balance)
-            iron = str(data_retrieve(str(message.author.id), "iron")).strip("[]")
-            iron = iron[1:len(balance)-2]
+            iron = str(data_retrievea(str(message.author.id), "iron")).strip("[]")
+            iron = iron[1:len(str(balance))-2]
             iron = int(iron)
             gainiron = str(data_retrievea(str(message.author.id), "gainIron")).strip("[]")
-            gainiron = gainiron[1:len(gainiron) - 2]
+            gainiron = gainiron[1:len(str(gainiron)) - 2]
             gainiron = int(gainiron)
             gainiron *= 2
             gainiron += 1
