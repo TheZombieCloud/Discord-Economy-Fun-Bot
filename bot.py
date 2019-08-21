@@ -6,7 +6,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = ''
+TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XVTPxQ.6vhE3NvoKk9ykRBk2oiqKkDGRF0'
 
 client = discord.Client()
 
@@ -112,25 +112,25 @@ async def on_message(message):
             await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="base"):
             embed = discord.Embed(title = "Base Basics", description = "Everything to do with your base.", color = 0x45F4E9)
-            embed.add_field(name="start", value="All the information needed to get started.", inline=True)
-            embed.add_field(name="register", value="Register an account and earn 10000 bits instantly.", inline=True)
+            embed.add_field(name="start", value="All the information needed to get started.", inline=False)
+            embed.add_field(name="register", value="Register an account and earn 10000 bits instantly.", inline=False)
             embed.add_field(name="info", value="All the information about your wall, units, and potentital upgrades.",
-                            inline=True)
-            embed.add_field(name="rankwall", value="Increases the health of your wall.")
-            embed.add_field(name="rankbits", value="Increases the amount of bits you earn every minute.")
-            embed.add_field(name="rankiron", value="Increases the amount of iron you earn every minute.")
+                            inline=False)
+            embed.add_field(name="rankwall", value="Increases the health of your wall.", inline = False)
+            embed.add_field(name="rankbits", value="Increases the amount of bits you earn every minute.", inline = False)
+            embed.add_field(name="rankiron", value="Increases the amount of iron you earn every minute.", inline = False)
             embed.add_field(name="infiltrate <user>",
-                            value="Attemps to infiltrate the enemy user. If successful, you take half of their bits and iron. They lose all their troops. If unsuccessful, you lose all your offensive power.")
+                            value="Attemps to infiltrate the enemy user. If successful, you take half of their bits and iron. They lose all their troops. If unsuccessful, you lose all your offensive power.", inline = False)
             embed.add_field(name="regen <amount>",
-                            value="Regens your wall by the amount specified. If over max health, restores the wall to max health. Cost is 1.5 units per unit of health.")
+                            value="Regens your wall by the amount specified. If over max health, restores the wall to max health. Cost is 1.5 units per unit of health.", inline = False)
             embed.set_footer(text = "Start creating your base today using ec!register and join the global economy! All commands begin with ec!")
             await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="mini"):
             embed = discord.Embed(title = "Minigames", description = "Everything to do with minigames.", color = 0x45F4E9)
-            embed.add_field(name="coin <bet>", value="Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x")
-            embed.add_field(name="dice <bet>", value="Roll a Dice. Replace <bet> with your bet. Win = 6x. Lose = 0x")
+            embed.add_field(name="coin <bet>", value="Flip a Coin. Replace <bet> with your bet. Win = 2x. Lose = 0x", inline = False)
+            embed.add_field(name="dice <bet>", value="Roll a Dice. Replace <bet> with your bet. Win = 6x. Lose = 0x", inline = False)
             embed.add_field(name="steal <user> <bet>",
-                            value="Steal from someone. Replace <user> with the user you want to steal from. Replace <bet> with your bet. 1/3 Success.")
+                            value="Steal from someone. Replace <user> with the user you want to steal from. Replace <bet> with your bet. 1/3 Success.", inline = False)
             embed.set_footer(text = "Fun minigames. All bets are in bits. All commands begin with ec!")
             await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="music"):
