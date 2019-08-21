@@ -90,9 +90,6 @@ def data_rmess(userID, balance, curiron, bits, iron):
 async def on_message(message):
     # we do not want the bot to reply to itself
     balance = str(data_retrieve(str(message.author.id))).strip("[]")
-    curiron = str(data_retrievea(str(message.author.id), "iron")).strip("[]")
-    bits = str(data_retrievea(str(message.author.id), "gainBits")).strip("[]")
-    iron = str(data_retrievea(str(message.author.id), "gainIron")).strip("[]")
     embed = discord.Embed(color = 0x45F4E9)
     channel = message.channel
 
@@ -493,7 +490,10 @@ async def on_message(message):
                         embed.add_field(name = "Sorry", value = "You need " + str(troop._cost-balance) + " more " + troop._curr + " to purchase this troop.")
                         await channel.send(embed = embed)
     # Get bits every minute
-    str2 = data_rmess(str(message.author.id), balance, curiron, bits, iron)
+    curiron = str(data_retrievea(str(message.author.id), "iron")).strip("[]")
+    bits = str(data_retrievea(str(message.author.id), "gainBits")).strip("[]")
+    iron = str(data_retrievea(str(message.author.id), "gainIron")).strip("[]")
+    data_rmess(str(message.author.id), balance, curiron, bits, iron)
 
 @client.event
 async def on_ready():
