@@ -6,7 +6,7 @@ import random
 import time
 from sqlite3 import Error
 
-TOKEN = 'Mzk0MjkxNjYzMDQ1OTE4NzY0.XVTPxQ.6vhE3NvoKk9ykRBk2oiqKkDGRF0'
+TOKEN = ''
 
 client = discord.Client()
 
@@ -375,7 +375,7 @@ async def on_message(message):
             embed.add_field(name = "Offensive", value = offensive)
             await channel.send(embed=embed)
         elif (message.content[3:13]=="infiltrate"):
-            mentions = message.mentions()
+            mentions = message.mentions
             if (len(mentions)>1):
                 embed = discord.Embed(color = 0x45F4E9)
                 embed.add_field(name = "Sorry", value = "Please mention only one user.")
@@ -412,13 +412,13 @@ async def on_message(message):
                         data_edita(otherID, "currency", otherbal - otherbal//2)
                         data_edita(otherID, "iron", otheriron - otheriron//2)
                         data_edita(otherID, "odmg", 0)
-                        data_edita(otherID, "ddmg", 0)
+                        data_edita(otherID, "ddmcg", 0)
                         data_edita(otherID, "health", maxhealth)
                         embed = discord.Embed(color = 0x45F4E9)
                         embed.add_field(name = "Success", value = "You successfully infiltrated the enemy base, earning " + str(otherbal//2) + " bits and " + str(otheriron//2) + " iron. All enemy troops have died as a result.")
                         await channel.send(embed=embed)
                     else:
-                        data_edita(userID, "odef", 0)
+                        data_edita(userID, "odmg", 0)
                         embed = discord.Embed(color = 0x45F4E9)
                         embed.add_field(name = "Failure", value = "You failed to infiltrate the enemy base, losing all your offensive troops.")
                         await channel.send(embed=embed)
