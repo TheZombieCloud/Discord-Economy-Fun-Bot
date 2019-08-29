@@ -13,8 +13,6 @@ client = discord.Client()
 conn = sqlite3.connect("currency.db")
 cursor = conn.cursor()
 
-troops = []
-
 class Troop():
     def __init__(self, type, name, dmg, cost, desc, curr):
         self._type = type
@@ -23,6 +21,8 @@ class Troop():
         self._cost = cost
         self._desc = desc
         self._curr = curr
+
+troops = [Troop("offensive", "Soldier", "1", "1000", "Infantry unit. Good for attacking in numbers.", "bits"), Troop("offensive", "Knight", "11", "10000", "Knights, as noble as they are, won't stop for anything to complete their objective.", "bits"), Troop("offensive", "Wizard", "125", "50", "Wizards shoot spells that can injure hundreds of enemies at a time.", "iron"), Troop ("offensive", "Commander", "1500", "500", "Commanders have an entire arsenal of Weapons of Mass Destruction and are not afraid to use them.","iron"), Troop("defensive", "Archer", "1", "1000", "Infantry unit. Good for defending in numbers.", "bits"), Troop("defensive", "Bishop", "11", "10000", "Bishops defend with their magical staffs.", "bits"), Troop("defensive", "Rook", "125", "50", "Rooks are beastly humans. It is said with their muscles they can stop hundreds of units.","iron"), Troop ("defensive", "Enforcer", "1500", "500","Enforcers can stop thousands of units with a clap of their hands, causing earth shattering earthquakes.", "iron")]
 
 def recursefib(wall, odmg, ddmg):
     if (odmg>0):
@@ -123,6 +123,7 @@ async def on_message(message):
                             value="Attemps to infiltrate the enemy user. If successful, you take half of their bits and iron. They lose all their troops. If unsuccessful, you lose all your offensive power.", inline = False)
             embed.add_field(name="regen <amount>",
                             value="Regens your wall by the amount specified. If over max health, restores the wall to max health. Cost is 1.5 units per unit of health.", inline = False)
+            embed.add_field(name="shop", value = "The shop allows you to buy troops for defending against or initiating infiltrations on the enemy.", inline = False)
             embed.set_footer(text = "Start creating your base today using ec!register and join the global economy! All commands begin with ec!")
             await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="mini"):
@@ -371,9 +372,10 @@ async def on_message(message):
                     else:
                         offensive += ", " + troop._name
             embed = discord.Embed(color = 0x45F4E9)
-            embed.add_field(name = "Shop", value = "Buy defensive troops here to protect your base, or buy offensive troops to infiltrate others. Type ec!<troop name> to learn more.")
+            embed.add_field(name = "Shop", value = "Buy defensive troops here to protect your base, or buy offensive troops to infiltrate others.")
             embed.add_field(name = "Defensive", value = defensive)
             embed.add_field(name = "Offensive", value = offensive)
+            embed.set_footer(text="Type ec!<troop name> to learn more.")
             await channel.send(embed=embed)
         elif (message.content[3:13]=="infiltrate"):
             mentions = message.mentions
@@ -469,46 +471,53 @@ async def on_message(message):
             if (message.content[3:len(message.content)]==troop._name):
                 embed = discord.Embed(color = 0x45F4E9)
                 embed.add_field(name = troop._name, value = troop._desc)
-                embed.add_field(name = "Type", value = troop._type)
-                embed.add_field(name = "Cost", value = troop._cost + " " + troop._curr)
-                embed.add_field(name = "Damage", value = troop._cost + "/s")
-                embed.add_field(name = "Buy?", value = "Type \"ec!" + troop._name + " buy\" to buy " + troop._name)
+                embed.add_field(name = "Type", value = troop._type.capitalize(), inline = False)
+                embed.add_field(name = "Cost", value = troop._cost + " " + troop._curr, inline = False)
+                embed.add_field(name = "Damage", value = troop._dmg + " units/second", inline = False)
+                embed.add_field(name = "Buy?", value = "Type \"ec!" + troop._name + " buy <quantity>\" to buy a <quantity> number of " + troop._name.lower() + "s", inline = False)
                 await channel.send(embed=embed)
-            if (message.content[3:len(message.content)]==str(troop._name + " buy")):
+            if (message.content[3:int(7+len(troop._name))]==str(troop._name + " buy")):
                 userID = str(message.author.id)
                 balance = str(data_retrieve(str(message.author.id))).strip("[]")
                 balance = balance[1:len(balance) - 2]
                 balance = int(balance)
-                iron = str(data_retrieve(str(message.author.id), "iron")).strip("[]")
-                iron = iron[1:len(balance) - 2]
+                iron = str(data_retrievea(str(message.author.id), "iron")).strip("[]")
+                iron = iron[1:len(iron) - 2]
                 iron = int(iron)
+                quantity = int(message.content[int(7+len(troop._name)):len(message.content)])
+                ddmg = str(data_retrievea(str(message.author.id), "ddmg")).strip("[]")
+                ddmg = ddmg[1:len(ddmg)-2]
+                ddmg = int(ddmg)
+                odmg = str(data_retrievea(str(message.author.id), "odmg")).strip("[]")
+                odmg = odmg[1:len(odmg)-2]
+                odmg = int(odmg)
                 if (troop._curr=="iron"):
-                    if (iron>=troop._cost):
-                        data_edita(userID, "iron", iron-troop._cost)
+                    if (iron>=int(troop._cost)*quantity):
+                        data_edita(userID, "iron", iron-int(troop._cost)*quantity)
                         if (troop._type == "defensive"):
-                            data_edita(userID, "ddmg", int(data_retrievea(userID, "ddmg"))+troop._dmg)
+                            data_edita(userID, "ddmg", ddmg + int(troop._dmg)*quantity)
                         else:
-                            data_edita(userID, "odmg", int(data_retrievea(userID, "odmg")) + troop._dmg)
+                            data_edita(userID, "odmg", odmg + int(troop._dmg)*quantity)
                         embed = discord.Embed(color = 0x45F4E9)
-                        embed.add_field(name = "Congrats", value = "You just purchased " + troop._name + " for " + troop._cost + " " + troop._curr + ".")
+                        embed.add_field(name = "Congrats", value = "You just purchased " + str(quantity) + " " + troop._name + "s for " + str(int(troop._cost)*quantity) + " " + troop._curr + ".")
                         await channel.send(embed = embed)
                     else:
                         embed = discord.Embed(color = 0x45F4E9)
-                        embed.add_field(name = "Sorry", value = "You need " + str(troop._cost-iron) + " more " + troop._curr + " to purchase this troop.")
+                        embed.add_field(name = "Sorry", value = "You need " + str(int(troop._cost)*quantity-iron) + " more " + troop._curr + " to purchase " + str(quantity) + " of this troop.")
                         await channel.send(embed = embed)
                 else:
-                    if (balance>=troop.cost):
-                        data_edita(userID, "currency", balance-troop._cost)
+                    if (balance>=int(troop._cost)*quantity):
+                        data_edita(userID, "currency", balance-int(troop._cost)*quantity)
                         if (troop._type == "defensive"):
-                            data_edita(userID, "ddmg", int(data_retrievea(userID, "ddmg")) + troop._dmg)
+                            data_edita(userID, "ddmg", ddmg + int(troop._dmg)*quantity)
                         else:
-                            data_edita(userID, "odmg", int(data_retrievea(userID, "odmg")) + troop._dmg)
+                            data_edita(userID, "odmg", odmg + int(troop._dmg)*quantity)
                         embed = discord.Embed(color = 0x45F4E9)
-                        embed.add_field(name = "Congrats", value = "You just purchased " + troop._name + " for " + troop._cost + " " + troop._curr + ".")
+                        embed.add_field(name = "Congrats", value = "You just purchased " + str(quantity) + " " + troop._name + "s for " + str(int(troop._cost)*quantity) + " " + troop._curr + ".")
                         await channel.send(embed = embed)
                     else:
                         embed = discord.Embed(color = 0x45F4E9)
-                        embed.add_field(name = "Sorry", value = "You need " + str(troop._cost-balance) + " more " + troop._curr + " to purchase this troop.")
+                        embed.add_field(name = "Sorry", value = "You need " + str(int(troop._cost)*quantity-balance) + " more " + troop._curr + " to purchase " + str(quantity) + " of this troop.")
                         await channel.send(embed = embed)
     # Get bits every minute
     curiron = str(data_retrievea(str(message.author.id), "iron")).strip("[]")
