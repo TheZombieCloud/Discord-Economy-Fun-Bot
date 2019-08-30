@@ -390,41 +390,47 @@ async def on_message(message):
                 try:
                     otherbal = int(otherbal[1:len(otherbal) - 2])
                 except ValueError:
+                    embed = discord.Embed(color = 0x45F4E9)
                     embed.add_field(name="Sorry", value="The person you are targeting doesn't have an account.")
                     await channel.send(embed=embed)
                     otherExists = False
                 userID = str(message.author.id)
-                balance = str(data_retrieve(userID)).strip("[]")
-                balance = int(balance[1:len(balance) - 2])
-                iron = str(data_retrievea(userID, "iron")).strip("[]")
-                iron = int(iron[1:len(iron)-2])
-                if otherExists:
-                    otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
-                    otheriron = int(otheriron[1:len(otheriron)-2])
-                    enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
-                    enemyhealth = int(enemyhealth[1:len(enemyhealth)-2])
-                    offen = str(data_retrievea(userID, "odmg")).strip("[]")
-                    offen = int(offen[1:len(offen)-2])
-                    defen = str(data_retrievea(otherID, "ddmg")).strip("[]")
-                    defen = int(defen[1:len(defen)-2])
-                    if recursefib(enemyhealth, offen, defen):
-                        maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
-                        maxhealth = int(maxhealth[1:len(maxhealth)-2])
-                        data_edita(userID, "currency", balance+otherbal//2)
-                        data_edita(userID, "iron", iron + otheriron//2)
-                        data_edita(otherID, "currency", otherbal - otherbal//2)
-                        data_edita(otherID, "iron", otheriron - otheriron//2)
-                        data_edita(otherID, "odmg", 0)
-                        data_edita(otherID, "ddmg", 0)
-                        data_edita(otherID, "health", maxhealth)
-                        embed = discord.Embed(color = 0x45F4E9)
-                        embed.add_field(name = "Success", value = "You successfully infiltrated the enemy base, earning " + str(otherbal//2) + " bits and " + str(otheriron//2) + " iron. All enemy troops have died as a result.")
-                        await channel.send(embed=embed)
-                    else:
-                        data_edita(userID, "odmg", 0)
-                        embed = discord.Embed(color = 0x45F4E9)
-                        embed.add_field(name = "Failure", value = "You failed to infiltrate the enemy base, losing all your offensive troops.")
-                        await channel.send(embed=embed)
+                if (otherID==userID):
+                    embed = discord.Embed(color = 0x45F4E9)
+                    embed.add_field(name = "Sorry", value = "You can't target yourself.")
+                    await channel.send(embed=embed)
+                else:
+                    balance = str(data_retrieve(userID)).strip("[]")
+                    balance = int(balance[1:len(balance) - 2])
+                    iron = str(data_retrievea(userID, "iron")).strip("[]")
+                    iron = int(iron[1:len(iron)-2])
+                    if otherExists:
+                        otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
+                        otheriron = int(otheriron[1:len(otheriron)-2])
+                        enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
+                        enemyhealth = int(enemyhealth[1:len(enemyhealth)-2])
+                        offen = str(data_retrievea(userID, "odmg")).strip("[]")
+                        offen = int(offen[1:len(offen)-2])
+                        defen = str(data_retrievea(otherID, "ddmg")).strip("[]")
+                        defen = int(defen[1:len(defen)-2])
+                        if recursefib(enemyhealth, offen, defen):
+                            maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
+                            maxhealth = int(maxhealth[1:len(maxhealth)-2])
+                            data_edita(userID, "currency", balance+otherbal//2)
+                            data_edita(userID, "iron", iron + otheriron//2)
+                            data_edita(otherID, "currency", otherbal - otherbal//2)
+                            data_edita(otherID, "iron", otheriron - otheriron//2)
+                            data_edita(otherID, "odmg", 0)
+                            data_edita(otherID, "ddmg", 0)
+                            data_edita(otherID, "health", maxhealth)
+                            embed = discord.Embed(color = 0x45F4E9)
+                            embed.add_field(name = "Success", value = "You successfully infiltrated the enemy base, earning " + str(otherbal//2) + " bits and " + str(otheriron//2) + " iron. All enemy troops have died as a result.")
+                            await channel.send(embed=embed)
+                        else:
+                            data_edita(userID, "odmg", 0)
+                            embed = discord.Embed(color = 0x45F4E9)
+                            embed.add_field(name = "Failure", value = "You failed to infiltrate the enemy base, losing all your offensive troops.")
+                            await channel.send(embed=embed)
             else:
                 embed = discord.Embed(color = 0x45F4E9)
                 embed.add_field(name = "Sorry", value = "Please mention the user you want to target.")
@@ -467,6 +473,8 @@ async def on_message(message):
                         data_edita(userID, "health", health+regen)
                         embed.add_field(name = "Success", value = "The health of your wall is now " + str(health+regen))
                         await channel.send(embed=embed)
+        elif (message.content[3:7]=="scan"):
+            pass
         for troop in troops:
             if (message.content[3:len(message.content)]==troop._name):
                 embed = discord.Embed(color = 0x45F4E9)
