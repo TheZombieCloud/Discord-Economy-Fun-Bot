@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="632c9fbe-6a13-4d8e-8882-b9e46e4a3571" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Discord-Economy-Fun-Bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Discord-Economy-Fun-Bot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/currency.db" beforeDir="false" afterPath="$PROJECT_DIR$/currency.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sqlite-tools-win32-x86-3250200/SQLiteStudio/InstallationLog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sqlite-tools-win32-x86-3250200/SQLiteStudio/InstallationLog.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+            <state relative-caret-position="511">
+              <caret line="420" column="73" selection-start-line="420" selection-start-column="73" selection-end-line="420" selection-end-column="73" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -163,12 +159,12 @@
       <workItem from="1564071903874" duration="20238000" />
       <workItem from="1565837803083" duration="2091000" />
       <workItem from="1566362059215" duration="4997000" />
-      <workItem from="1567111341371" duration="7558000" />
+      <workItem from="1567111341371" duration="9309000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64871000" />
+    <option name="totallyTimeSpent" value="66622000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -262,8 +258,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+        <state relative-caret-position="511">
+          <caret line="420" column="73" selection-start-line="420" selection-start-column="73" selection-end-line="420" selection-end-column="73" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

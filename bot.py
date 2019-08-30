@@ -415,7 +415,7 @@ async def on_message(message):
                         data_edita(otherID, "currency", otherbal - otherbal//2)
                         data_edita(otherID, "iron", otheriron - otheriron//2)
                         data_edita(otherID, "odmg", 0)
-                        data_edita(otherID, "ddmcg", 0)
+                        data_edita(otherID, "ddmg", 0)
                         data_edita(otherID, "health", maxhealth)
                         embed = discord.Embed(color = 0x45F4E9)
                         embed.add_field(name = "Success", value = "You successfully infiltrated the enemy base, earning " + str(otherbal//2) + " bits and " + str(otheriron//2) + " iron. All enemy troops have died as a result.")
