@@ -474,7 +474,46 @@ async def on_message(message):
                         embed.add_field(name = "Success", value = "The health of your wall is now " + str(health+regen))
                         await channel.send(embed=embed)
         elif (message.content[3:7]=="scan"):
-            pass
+            mentions = message.mentions
+            if (len(mentions) > 1):
+                embed = discord.Embed(color=0x45F4E9)
+                embed.add_field(name="Sorry", value="Please mention only one user.")
+                await channel.sned(embed=embed)
+            elif (len(mentions) == 1):
+                otherID = str(mentions[0].id)
+                otherbal = str(data_retrieve(otherID)).strip("[]")
+                otherExists = True
+                try:
+                    otherbal = int(otherbal[1:len(otherbal) - 2])
+                except ValueError:
+                    embed = discord.Embed(color=0x45F4E9)
+                    embed.add_field(name="Sorry", value="The person you are scanning doesn't have an account.")
+                    await channel.send(embed=embed)
+                    otherExists = False
+                userID = str(message.author.id)
+
+                otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
+                otheriron = int(otheriron[1:len(otheriron) - 2])
+                enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
+                enemyhealth = int(enemyhealth[1:len(enemyhealth) - 2])
+                maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
+                maxhealth = int(maxhealth[1:len(maxhealth)-2])
+                embed = discord.Embed(color=0x45F4E9)
+                embed.add_field(name="Wall Health", value="Looks like their wall is sitting at " + str(enemyhealth) + "/" + str(maxhealth) + " health.")
+                embed.add_field(name="Balance", value="Bits and Iron", inline=False)
+                embed.add_field(name="Bits", value=str(otherbal) + " bits", inline=True)
+                embed.add_field(name="Iron", value=str(otheriron) + " iron", inline=True)
+                embed.add_field(name="Troops", value="Your offensive and defensive damage", inline=False)
+                embed.add_field(name="Offensive Damage", value="??? offensive damage",
+                                inline=True)
+                embed.add_field(name="Defensive Damage", value="??? defensive damage",
+                                inline=True)
+                embed.set_footer(text=str(mentions[0].name) + "'s Base")
+                await channel.send(embed=embed)
+            else:
+                embed = discord.Embed(color=0x45F4E9)
+                embed.add_field(name="Sorry", value="Please mention the user you want to scan.")
+                await channel.send(embed=embed)
         for troop in troops:
             if (message.content[3:len(message.content)]==troop._name):
                 embed = discord.Embed(color = 0x45F4E9)
