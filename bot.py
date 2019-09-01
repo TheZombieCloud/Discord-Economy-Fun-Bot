@@ -36,10 +36,10 @@ def recursefib(wall, odmg, ddmg):
         return False
 
 def create_table():
-    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER, odmg INTEGER, ddmg)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS currency(userID TEXT, currency INTEGER, iron INTEGER, time DATE, mtime DATE, health INTEGER, maxhealth INTEGER, gainBits INTEGER, gainIron INTEGER, odmg INTEGER, ddmg INTEGER, cooldowntime DATE, cooldown INTEGER)")
 
 def data_entry(userID):
-    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, 0, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000, 1000, 10, 0, 0, 0)")
+    cursor.execute("INSERT INTO currency VALUES(" + userID + ", 10000, 0, '" + str(datetime.datetime.now()) +"', '" + str(datetime.datetime.now()) +"', 1000, 1000, 10, 0, 0, 0, '" + str(datetime.datetime.now()) + "', 1)")
     conn.commit()
 
 def data_retrieve(userID):
@@ -72,6 +72,23 @@ def data_editdaily(userID, balance):
         return "1"
     else:
         return (datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).seconds
+
+def data_cooldown(userID):
+    cursor.execute("SELECT cooldowntime FROM currency WHERE userID = " + userID)
+    data2 = str(cursor.fetchall()).strip("[]")
+    data2 = data2[2:len(data2)-3]
+    cursor.execute("SELECT cooldown FROM currency WHERE userID = " + userID)
+    data3 = str(cursor.fetchall()).strip("[]")
+    data3 = int(data3[1:len(data3)-2])
+    if (data3==0 or (datetime.datetime.now()-datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).days>=1):
+        return "1"
+    else:
+        return (datetime.datetime.now() - datetime.datetime.strptime(data2, "%Y-%m-%d %H:%M:%S.%f")).seconds
+
+def data_editcooldown(userID):
+    cursor.execute("UPDATE currency SET cooldown = 1 WHERE userID = " + userID)
+    cursor.execute("UPDATE currency SET cooldowntime = " + datetime.datetime.now() + " WHERE userID = " + userID)
+    cursor.commit()
 
 def data_rmess(userID, balance, curiron, bits, iron):
     cursor.execute("SELECT mtime FROM currency WHERE userID = " + userID)
@@ -160,6 +177,11 @@ async def on_message(message):
             defensive = str(data_retrievea(userID, "ddmg")).strip("[]")
             gainBits = str(data_retrievea(userID, "gainBits")).strip("[]")
             gainIron = str(data_retrievea(userID, "gainIron")).strip("[]")
+            cooldown = ""
+            if (data_cooldown(userID)=="1"):
+                cooldown = 86400
+            else:
+                cooldown = data_cooldown(userID)
             embed.add_field(name = "Wall Health", value = "Looks like your wall is sitting at " + health[1:len(health)-2] + "/" + maxhealth[1:len(maxhealth)-2] + " health.")
             embed.add_field(name = "Balance", value = "Bits and Iron", inline = False)
             embed.add_field(name = "Bits", value = balance[1:len(balance)-2] + " bits", inline = True)
@@ -170,6 +192,7 @@ async def on_message(message):
             embed.add_field(name = "Income", value = "The amount of bits and iron you gain every minute you talk", inline = False)
             embed.add_field(name = "Bits", value = gainBits[1:len(gainBits)-2] + " bits/minute", inline = True)
             embed.add_field(name = "Iron", value = gainIron[1:len(gainIron)-2] + " iron/minute", inline = True)
+            embed.add_field(name = "Cooldown", value = str(86400-cooldown) + " seconds", inline = False)
             embed.set_footer(text = "Check available upgrades by typing ec!upgrades")
             await channel.send(embed=embed)
         elif (len(message.content)>=7 and message.content[3:7] == "dice"):
@@ -403,33 +426,44 @@ async def on_message(message):
                     balance = str(data_retrieve(userID)).strip("[]")
                     balance = int(balance[1:len(balance) - 2])
                     iron = str(data_retrievea(userID, "iron")).strip("[]")
-                    iron = int(iron[1:len(iron)-2])
+                    iron = int(iron[1:len(iron) - 2])
                     if otherExists:
-                        otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
-                        otheriron = int(otheriron[1:len(otheriron)-2])
-                        enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
-                        enemyhealth = int(enemyhealth[1:len(enemyhealth)-2])
-                        offen = str(data_retrievea(userID, "odmg")).strip("[]")
-                        offen = int(offen[1:len(offen)-2])
-                        defen = str(data_retrievea(otherID, "ddmg")).strip("[]")
-                        defen = int(defen[1:len(defen)-2])
-                        if recursefib(enemyhealth, offen, defen):
-                            maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
-                            maxhealth = int(maxhealth[1:len(maxhealth)-2])
-                            data_edita(userID, "currency", balance+otherbal//2)
-                            data_edita(userID, "iron", iron + otheriron//2)
-                            data_edita(otherID, "currency", otherbal - otherbal//2)
-                            data_edita(otherID, "iron", otheriron - otheriron//2)
-                            data_edita(otherID, "odmg", 0)
-                            data_edita(otherID, "ddmg", 0)
-                            data_edita(otherID, "health", maxhealth)
-                            embed = discord.Embed(color = 0x45F4E9)
-                            embed.add_field(name = "Success", value = "You successfully infiltrated the enemy base, earning " + str(otherbal//2) + " bits and " + str(otheriron//2) + " iron. All enemy troops have died as a result.")
-                            await channel.send(embed=embed)
+                        if (data_cooldown(otherID)=="1"):
+                            data_editcooldown(otherID)
+                            data_edita(userID, "cooldown", 0)
+                            otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
+                            otheriron = int(otheriron[1:len(otheriron) - 2])
+                            enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
+                            enemyhealth = int(enemyhealth[1:len(enemyhealth) - 2])
+                            offen = str(data_retrievea(userID, "odmg")).strip("[]")
+                            offen = int(offen[1:len(offen) - 2])
+                            defen = str(data_retrievea(otherID, "ddmg")).strip("[]")
+                            defen = int(defen[1:len(defen) - 2])
+                            if recursefib(enemyhealth, offen, defen):
+                                maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
+                                maxhealth = int(maxhealth[1:len(maxhealth) - 2])
+                                data_edita(userID, "currency", balance + otherbal // 2)
+                                data_edita(userID, "iron", iron + otheriron // 2)
+                                data_edita(otherID, "currency", otherbal - otherbal // 2)
+                                data_edita(otherID, "iron", otheriron - otheriron // 2)
+                                data_edita(otherID, "odmg", 0)
+                                data_edita(otherID, "ddmg", 0)
+                                data_edita(otherID, "health", maxhealth)
+                                embed = discord.Embed(color=0x45F4E9)
+                                embed.add_field(name="Success",
+                                                value="You successfully infiltrated the enemy base, earning " + str(
+                                                    otherbal // 2) + " bits and " + str(
+                                                    otheriron // 2) + " iron. All enemy troops have died as a result.")
+                                await channel.send(embed=embed)
+                            else:
+                                data_edita(userID, "odmg", 0)
+                                embed = discord.Embed(color=0x45F4E9)
+                                embed.add_field(name="Failure",
+                                                value="You failed to infiltrate the enemy base, losing all your offensive troops.")
+                                await channel.send(embed=embed)
                         else:
-                            data_edita(userID, "odmg", 0)
-                            embed = discord.Embed(color = 0x45F4E9)
-                            embed.add_field(name = "Failure", value = "You failed to infiltrate the enemy base, losing all your offensive troops.")
+                            embed = discord.Embed(color =0x45F4E9)
+                            embed.add_field(name = "Sorry", value = "You have to wait " + str(86400-data_cooldown(otherID)) + " seconds before you can attack this base.")
                             await channel.send(embed=embed)
             else:
                 embed = discord.Embed(color = 0x45F4E9)
@@ -491,25 +525,40 @@ async def on_message(message):
                     await channel.send(embed=embed)
                     otherExists = False
                 userID = str(message.author.id)
-
-                otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
-                otheriron = int(otheriron[1:len(otheriron) - 2])
-                enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
-                enemyhealth = int(enemyhealth[1:len(enemyhealth) - 2])
-                maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
-                maxhealth = int(maxhealth[1:len(maxhealth)-2])
-                embed = discord.Embed(color=0x45F4E9)
-                embed.add_field(name="Wall Health", value="Looks like their wall is sitting at " + str(enemyhealth) + "/" + str(maxhealth) + " health.")
-                embed.add_field(name="Balance", value="Bits and Iron", inline=False)
-                embed.add_field(name="Bits", value=str(otherbal) + " bits", inline=True)
-                embed.add_field(name="Iron", value=str(otheriron) + " iron", inline=True)
-                embed.add_field(name="Troops", value="Your offensive and defensive damage", inline=False)
-                embed.add_field(name="Offensive Damage", value="??? offensive damage",
-                                inline=True)
-                embed.add_field(name="Defensive Damage", value="??? defensive damage",
-                                inline=True)
-                embed.set_footer(text=str(mentions[0].name) + "'s Base")
-                await channel.send(embed=embed)
+                if (otherExists):
+                    if (otherID!=userID):
+                        otheriron = str(data_retrievea(otherID, "iron")).strip("[]")
+                        otheriron = int(otheriron[1:len(otheriron) - 2])
+                        enemyhealth = str(data_retrievea(otherID, "health")).strip("[]")
+                        enemyhealth = int(enemyhealth[1:len(enemyhealth) - 2])
+                        maxhealth = str(data_retrievea(otherID, "maxhealth")).strip("[]")
+                        maxhealth = int(maxhealth[1:len(maxhealth) - 2])
+                        cooldown = ""
+                        if (data_cooldown(otherID)=="1"):
+                            cooldown = 86400
+                        else:
+                            cooldown = data_cooldown(otherID)
+                        embed = discord.Embed(color=0x45F4E9)
+                        embed.add_field(name="Wall Health", value="Looks like their wall is sitting at " + str(enemyhealth) + "/" + str(maxhealth) + " health.")
+                        embed.add_field(name="Balance", value="Bits and Iron", inline=False)
+                        embed.add_field(name="Bits", value=str(otherbal) + " bits", inline=True)
+                        embed.add_field(name="Iron", value=str(otheriron) + " iron", inline=True)
+                        embed.add_field(name="Troops", value="Your offensive and defensive damage", inline=False)
+                        embed.add_field(name="Offensive Damage", value="??? offensive damage",
+                                        inline=True)
+                        embed.add_field(name="Defensive Damage", value="??? defensive damage",
+                                        inline=True)
+                        embed.add_field(name = "Cooldown", value = str(86400-cooldown) + " seconds", inline = False)
+                        embed.set_footer(text=str(mentions[0].name) + "'s Base")
+                        await channel.send(embed=embed)
+                    else:
+                        embed = discord.Embed(color=0x45F4E9)
+                        embed.add_field(name = "Sorry", value = "You can't scan yourself.")
+                        await channel.send(embed=embed)
+                else:
+                    embed = discord.Embed(color=0x45F4E9)
+                    embed.add_field(name = "Sorry", value = "The base you are trying to scan doesn't exist.")
+                    await channel.send(embed=embed)
             else:
                 embed = discord.Embed(color=0x45F4E9)
                 embed.add_field(name="Sorry", value="Please mention the user you want to scan.")
