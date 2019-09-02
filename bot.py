@@ -105,15 +105,15 @@ def data_rmess(userID, balance, curiron, bits, iron):
         return "1"
 
 # Coroutines for Joining and Leaving Voice Channel
+global voice
 
 async def summon(message):
+    global voice
     channel = message.author.voice.channel
-    await channel.connect()
+    voice = await channel.connect()
 
-async def leave(message):
-    server = message.server
-    voice_client = client.voice_client_in(server)
-    await voice_client.disconnect()
+async def leave():
+    await voice.disconnect()
 
 @client.event
 async def on_message(message):
@@ -577,6 +577,8 @@ async def on_message(message):
                 await channel.send(embed=embed)
         elif (message.content[3:9]=="summon"):
             await summon(message)
+        elif (message.content[3:8]=="leave"):
+            await leave()
         for troop in troops:
             if (message.content[3:len(message.content)]==troop._name):
                 embed = discord.Embed(color = 0x45F4E9)
