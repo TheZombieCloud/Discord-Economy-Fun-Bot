@@ -1,4 +1,5 @@
 import discord
+import nacl
 import math
 import datetime
 import sqlite3
@@ -102,6 +103,17 @@ def data_rmess(userID, balance, curiron, bits, iron):
         cursor.execute("UPDATE currency SET mtime = '" + str(now) + "' WHERE userID = " + userID)
         conn.commit()
         return "1"
+
+# Coroutines for Joining and Leaving Voice Channel
+
+async def summon(message):
+    channel = message.author.voice.channel
+    await channel.connect()
+
+async def leave(message):
+    server = message.server
+    voice_client = client.voice_client_in(server)
+    await voice_client.disconnect()
 
 @client.event
 async def on_message(message):
@@ -563,6 +575,8 @@ async def on_message(message):
                 embed = discord.Embed(color=0x45F4E9)
                 embed.add_field(name="Sorry", value="Please mention the user you want to scan.")
                 await channel.send(embed=embed)
+        elif (message.content[3:9]=="summon"):
+            await summon(message)
         for troop in troops:
             if (message.content[3:len(message.content)]==troop._name):
                 embed = discord.Embed(color = 0x45F4E9)
