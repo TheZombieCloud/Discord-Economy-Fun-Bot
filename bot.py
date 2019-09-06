@@ -1,4 +1,5 @@
 import discord
+import youtube_dl
 import nacl
 import math
 import datetime
@@ -115,6 +116,9 @@ async def summon(message):
 async def leave():
     await voice.disconnect()
 
+async def play(url):
+    pass
+
 @client.event
 async def on_message(message):
     # we do not want the bot to reply to itself
@@ -136,8 +140,8 @@ async def on_message(message):
             embed = discord.Embed(title = "All Commands", description = "Speak every 60 seconds to get bits and iron. Use ec! befor each command.", color=0x45F4E9)
             embed.add_field(name = "Base Basics", value = "Do ec!base for more info about these commands.", inline = False)
             embed.add_field(name = "Minigames", value = "Do ec!mini for more info about these commands.", inline = False)
-            embed.add_field(name = "Music", value = "Do ec!music for more info about these commands", inline = False)
-            embed.set_footer(text = "Global Economy with Leaderboards.")
+            #embed.add_field(name = "Music", value = "Do ec!music for more info about these commands", inline = False)
+            #embed.set_footer(text = "Global Economy with Leaderboards.")
             await channel.send(embed = embed)
         elif (message.content[3:len(message.content)]=="base"):
             embed = discord.Embed(title = "Base Basics", description = "Everything to do with your base.", color = 0x45F4E9)
