@@ -32,8 +32,9 @@ Contribute small changes by making pull requests. For bigger change open an issu
 
 ## Upcoming Changes
 
-- Add music integration into the bot to allow for users to enjoy music while destroying their enemies
 - Full unit testing
+- Refactoring
+- Add music integration into the bot to allow for users to enjoy music while destroying their enemies
 
 [app]: https://github.com/TheZombieCloud/Econumy/blob/master/images/Discord%20Application.png
 [token]: https://github.com/TheZombieCloud/Econumy/blob/master/images/Discord%20Token.png
