@@ -24,7 +24,7 @@ Contribute small changes by making pull requests. For bigger change open an issu
 
 ## License
 
-(https://choosealicense.com/licenses/mit/ "MIT")
+[MIT] (https://choosealicense.com/licenses/mit/ "MIT")
 
 ## Version
 
