@@ -1,5 +1,39 @@
-# Econumy - A Fun Discord Economy Bot
+# Econumy 
 
-Econumy is an ongoing project with the purpose of creating a bot that integrates it own currency (bits and iron). Each user has a base with a wall surrounding their valuables. The wall has a certain amount of health and can be upgradeable. Each user will have a bit and iron generator which allow them to earn bits and iron every minute they talk in Discord (bits and iron are saved globally). Each of these generators are upgradeable. This currency can be used to play fun minigames and purchase certain commands. Each user is also able to purchase offensive and defensive units in order to protect their base, or to infiltrate other bases to steal their loot. 
+Econumy is a Discord bot that allows users to build a base, generate money, and infiltrate other bases to steal their money. There are also minigames that the user can play to earn more money, or lose it all.
 
-More info will be given throughout the duration of this project.
+## Installation
+
+Download Econumy as a .zip file or clone it locally. To run it, simply copy and paste your bot token into the TOKEN variable listed on line 10:
+
+```python
+TOKEN = ''
+```
+
+To create a bot just click the "New Application" button in the top right corner:
+
+![app]
+ 
+Follow the instructions and create your bot. Once created, get your token by pressing the "Bot" tab with the puzzle piece on the left and click "Copy Token":
+
+![token]
+
+## Contributions
+
+Contribute small changes by making pull requests. For bigger change open an issue first stating what you would like to change.
+
+## License
+
+(https://choosealicense.com/licenses/mit/ "MIT")
+
+## Version
+
+0.99
+
+## Upcoming Changes
+
+- Add music integration into the bot to allow for users to enjoy music while destroying their enemies
+- Full unit testing
+
+[app]: https://github.com/TheZombieCloud/Econumy/blob/master/images/Discord%20Application.png
+[token]: https://github.com/TheZombieCloud/Econumy/blob/master/images/Discord%20Token.png
