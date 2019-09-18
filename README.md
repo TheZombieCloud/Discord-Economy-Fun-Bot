@@ -28,12 +28,15 @@ Contribute small changes by making pull requests. For bigger change open an issu
 
 ## Version
 
-0.99
+0.999
+
+## Changes
+
+- Refactored
 
 ## Upcoming Changes
 
 - Full unit testing
-- Refactoring
 - Add music integration into the bot to allow for users to enjoy music while destroying their enemies
 
 [app]: https://github.com/TheZombieCloud/Econumy/blob/master/images/Discord%20Application.png
