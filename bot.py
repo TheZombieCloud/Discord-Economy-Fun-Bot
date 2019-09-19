@@ -233,7 +233,7 @@ async def on_message(message):
             embed = discord.Embed(title = "Base Basics", description = "Everything to do with your base.", color = 0x45F4E9)
             embed.add_field(name="start", value="All the information needed to get started.", inline=False)
             embed.add_field(name="register", value="Register an account and earn 10000 bits instantly.", inline=False)
-            embed.add_field(name="info", value="All the information about your wall, units, and potentital upgrades.",
+            embed.add_field(name="info", value="All the information about your wall and units.",
                             inline=False)
             embed.add_field(name="rankwall", value="Increases the health of your wall.", inline = False)
             embed.add_field(name="rankbits", value="Increases the amount of bits you earn every minute.", inline = False)
@@ -291,7 +291,7 @@ async def on_message(message):
             embed.add_field(name = "Bits", value = gainBits[1:len(gainBits)-2] + " bits/minute", inline = True)
             embed.add_field(name = "Iron", value = gainIron[1:len(gainIron)-2] + " iron/minute", inline = True)
             embed.add_field(name = "Cooldown", value = str(86400-cooldown) + " seconds", inline = False)
-            embed.set_footer(text = "Check available upgrades by typing ec!upgrades")
+            #embed.set_footer(text = "Check available upgrades by typing ec!upgrades")
             await channel.send(embed=embed)
         elif (len(message.content)>=7 and message.content[3:7] == "dice"):
             bet = int(message.content[7:len(message.content)])
@@ -503,7 +503,7 @@ async def on_message(message):
             if (len(mentions)>1):
                 embed = discord.Embed(color = 0x45F4E9)
                 embed.add_field(name = "Sorry", value = "Please mention only one user.")
-                await channel.sned(embed=embed)
+                await channel.send(embed=embed)
             elif (len(mentions)==1):
                 otherID = str(mentions[0].id)
                 otherbal = str(data_retrieve(otherID, "currency")).strip("[]")
@@ -580,24 +580,24 @@ async def on_message(message):
             try:
                 regen = int(message.content[9: len(message.content)])
             except ValueError:
-                embed = discord.Embed(embed = 0x45F4E9)
+                embed = discord.Embed(color=0x45F4E9)
                 embed.add_field(name = "Sorry", value = "Please enter a valid number for the amount of health you wish to regen")
                 await channel.send(embed=embed)
                 valid = False
             if valid:
                 if (regen==0):
-                    embed = discord.Embed(embed=0x45F4E9)
+                    embed = discord.Embed(color=0x45F4E9)
                     embed.add_field(name="Sorry", value="Please enter a valid number for the amount of health you wish to regen")
                     await channel.send(embed=embed)
                 if (maxhealth-health==0):
-                    embed = discord.Embed(embed = 0x45F4E9)
+                    embed = discord.Embed(color=0x45F4E9)
                     embed.add_field(name = "Sorry", value = "Your wall is at full health.")
                     await channel.send(embed=embed)
                 else:
                     if regen+health>maxhealth:
                         regen = maxhealth-health
                     if (int(math.floor(regen * 1.5)) > balance):
-                        embed = discord.Embed(embed=0x45F4E9)
+                        eembed = discord.Embed(color=0x45F4E9)
                         embed.add_field(name="Sorry", value="You don't have enough money to regen your wall that much.")
                         await channel.send(embed=embed)
                     else:

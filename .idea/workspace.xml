@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="632c9fbe-6a13-4d8e-8882-b9e46e4a3571" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Discord-Economy-Fun-Bot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Discord-Economy-Fun-Bot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/currency.db" beforeDir="false" afterPath="$PROJECT_DIR$/currency.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sqlite-tools-win32-x86-3250200/SQLiteStudio/InstallationLog.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sqlite-tools-win32-x86-3250200/SQLiteStudio/InstallationLog.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="77" column="27" lean-forward="true" selection-start-line="77" selection-start-column="27" selection-end-line="77" selection-end-column="27" />
+            <state relative-caret-position="221">
+              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -64,6 +60,8 @@
       <find>steal</find>
       <find>balance</find>
       <find>data_retrieve</find>
+      <find>upgrade</find>
+      <find>infiltrate</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,7 +87,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -101,6 +98,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -191,18 +189,19 @@
       <workItem from="1568033270956" duration="8406000" />
       <workItem from="1568246721044" duration="6811000" />
       <workItem from="1568403140730" duration="601000" />
-      <workItem from="1568665348068" duration="3635000" />
+      <workItem from="1568665348068" duration="3721000" />
+      <workItem from="1568859457093" duration="2152000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108102000" />
+    <option name="totallyTimeSpent" value="110340000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16976556" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17219079" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -290,8 +289,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="77" column="27" lean-forward="true" selection-start-line="77" selection-start-column="27" selection-end-line="77" selection-end-column="27" />
+        <state relative-caret-position="221">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
